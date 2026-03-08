@@ -72,6 +72,7 @@ class MainWindow(QWidget):
             self.main_layout.addWidget(self.scroll)
             self.main_layout.addLayout(self.messages_layout)
             self.main_layout.addLayout(self.message_writer)
+            #self.scroll_widget.setStyleSheet("background-color: rgb(255, 255, 255);")
             self.scroll.setWidget(self.scroll_widget)
 
             # 1. Create the QLineEdit widget
@@ -116,17 +117,34 @@ class MainWindow(QWidget):
                 del item
 
     def message_label(self, message, username):
-        # Make border color depending on user's name somehow
-
+        # Make border color depending on username somehow
+        r = 0
+        g = 0
+        b = 0
+        for i in enumerate(username):
+            if i[0]%3==0:
+                r+=ord(i[1])
+            if i[0]%3==1:
+                g+=ord(i[1])
+            if i[0]%3==2:
+                b+=ord(i[1])
+        r%=256
+        g%=256
+        b%=256
+        print(r, g, b)
         # Message text
         words = f"{username}:\n{message}"
         message_label = QLabel(words)
         message_label.setWordWrap(True)
         message_label.setStyleSheet("min-width: 640px;"
                                     "max-width: 640px;"
-                                    "border-top: 2px solid rgba(0,0,0,0.2);"
+                                    f"border-top: 2px solid rgba({r},{g},{b},0.2);"
                                     "margin: 1rem;"
                                     "padding: 0.5em;")
+        message_label.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.MinimumExpanding
+        )
         message_label.setFont(self.font)
 
         # Adding to layout
